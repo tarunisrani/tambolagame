@@ -1,4 +1,4 @@
-package com.tambola.game.ticketgenerator;
+package com.tambola.game.ticketgenerator.service;
 
 import java.util.Random;
 

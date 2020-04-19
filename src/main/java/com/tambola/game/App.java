@@ -1,15 +1,6 @@
 package com.tambola.game;
 
-import static com.tambola.game.ticketgenerator.Processor.COLUMN_SIZE;
-
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.tambola.game.ticketgenerator.Processor;
-import com.tambola.game.ticketgenerator.TambolaTicket;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.util.List;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

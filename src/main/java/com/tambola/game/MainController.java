@@ -1,4 +1,4 @@
-package com.tambola.game.ticketgenerator;
+package com.tambola.game;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;

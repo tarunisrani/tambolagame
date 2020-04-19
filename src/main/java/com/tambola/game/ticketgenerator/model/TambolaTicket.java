@@ -1,7 +1,7 @@
-package com.tambola.game.ticketgenerator;
+package com.tambola.game.ticketgenerator.model;
 
-import static com.tambola.game.ticketgenerator.Processor.COLUMN_SIZE;
-import static com.tambola.game.ticketgenerator.Processor.ROW_SIZE;
+import static com.tambola.game.ticketgenerator.service.TicketService.COLUMN_SIZE;
+import static com.tambola.game.ticketgenerator.service.TicketService.ROW_SIZE;
 
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Phrase;
@@ -17,6 +17,10 @@ public class TambolaTicket {
   }*/
 
   private List<Integer>[] ticketNumberSet;
+
+  public Integer[][] getTicket() {
+    return ticket;
+  }
 
   private Integer[][] ticket = new Integer[ROW_SIZE][COLUMN_SIZE];
 
