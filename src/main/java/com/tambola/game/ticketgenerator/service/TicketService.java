@@ -37,6 +37,7 @@ public class TicketService {
   public List<TambolaTicketVO> generatePrintableTickets(int numberOfTickets) {
     return generateTicket(numberOfTickets).stream().map(tambolaTicket -> {
       tambolaTicket.arrangeNumbers();
+      tambolaTicket.printTicket();
       return new TambolaTicketVO(tambolaTicket.getTicket());
     }).collect(
         Collectors.toList());

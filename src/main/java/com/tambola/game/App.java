@@ -4,6 +4,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import java.util.List;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @SpringBootApplication
 @EnableWebMvc
+@ComponentScan(lazyInit = true)
 public class App extends WebMvcConfigurerAdapter {
   /*public static void main(String[] args) throws DocumentException, FileNotFoundException {
     Processor processor = new Processor();

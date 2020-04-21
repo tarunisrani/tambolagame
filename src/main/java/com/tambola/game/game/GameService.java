@@ -1,4 +1,4 @@
-package com.tambola.game.board;
+package com.tambola.game.game;
 
 import com.tambola.game.Game;
 import com.tambola.game.GameTicket;
@@ -10,11 +10,12 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BoardService {
+public class GameService {
 
   @Autowired
   private TicketService ticketService;
