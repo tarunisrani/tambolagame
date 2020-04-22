@@ -4,6 +4,7 @@ import com.tambola.game.Game;
 import com.tambola.game.User;
 import com.tambola.game.ticketgenerator.model.TambolaTicketVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,5 +30,10 @@ public class GameController {
   @ResponseBody
   public TambolaTicketVO assignTicket(@RequestParam("mob_no") String mobileNumber, @RequestParam("game_id") Integer gameID ){
     return gameService.assignTicket(mobileNumber, gameID);
+  }
+
+  @GetMapping("/game/nextnumber")
+  public Integer getNewNumber(@RequestParam("game_id") Integer gameID){
+    return gameService.getNewNumber(gameID);
   }
 }
