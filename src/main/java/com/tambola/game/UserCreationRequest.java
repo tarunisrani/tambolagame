@@ -5,8 +5,9 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class User {
+public class UserCreationRequest {
 
-  private Integer userID;
+  private String mobNumber;
   private String userName;
+  private String notificationKey;
 }

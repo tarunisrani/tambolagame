@@ -1,7 +1,7 @@
 package com.tambola.game.game;
 
 import com.tambola.game.Game;
-import com.tambola.game.User;
+import com.tambola.game.UserContext;
 import com.tambola.game.ticketgenerator.model.TambolaTicketVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +21,8 @@ public class GameController {
 
   @PostMapping("/game")
   public Game createGame(@RequestParam("player_count") Integer playerCount,
-      @RequestParam("game_type") String gameType,
-      @RequestBody User user){
+      @RequestParam(value = "game_type", required = false) String gameType,
+      @RequestBody UserContext user){
     return gameService.createGame(playerCount, gameType, user);
   }
 

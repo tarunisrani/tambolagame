@@ -1,6 +1,7 @@
-package com.tambola.game;
+package com.tambola.game.game;
 
 import com.google.gson.Gson;
+import com.tambola.game.GameTicket;
 import com.tambola.game.ticketgenerator.model.TambolaTicketVO;
 import com.tambola.game.utils.JDBCTemplateWrapper;
 import java.sql.ResultSet;

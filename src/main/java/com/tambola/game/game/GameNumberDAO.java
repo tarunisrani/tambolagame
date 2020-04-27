@@ -1,4 +1,4 @@
-package com.tambola.game;
+package com.tambola.game.game;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

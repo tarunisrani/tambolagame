@@ -4,6 +4,7 @@ import static com.tambola.game.utils.TryCatchUtils.tryCatch;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 import com.google.common.collect.ImmutableList;
+import com.sun.xml.internal.ws.api.model.ExceptionType;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,6 +21,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +47,16 @@ public class JDBCTemplateWrapper {
       String sql, Map<String, ?> paramsMap, KeyHolder keyHolder) {
     SqlParameterSource paramsSource = new MapSqlParameterSource(paramsMap);
     return jdbcTemplate.update(sql, paramsSource, keyHolder);
+  }
+
+  public Integer insertAndGetKey(String sql, Map<String, Object> paramsMap, String... keyColumnNames) {
+    KeyHolder keyHolder = new GeneratedKeyHolder();
+
+    Integer count = this.updateWithGeneratedKeysWithColumns(sql, paramsMap, keyHolder, keyColumnNames);
+    if(count!=1){
+      throw new RuntimeException();
+    }
+    return keyHolder.getKey().intValue();
   }
 
   /*public CompletionStage<Integer> updateWithGeneratedKeysWithColumns(
