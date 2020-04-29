@@ -62,18 +62,18 @@ public class TicketService {
     List<Integer> rowSecond = new ArrayList<>();
     List<Integer> rowThird = new ArrayList<>();
     for(int i=0;i< COLUMN_SIZE;i++){
-      count += ticket[i].size();
+      count += ticket[i].stream().filter(el-> el!=0).count();
       List<Integer> integers = ticket[i];
       if(integers.isEmpty()){
         continue;
       }
-      if(integers.get(0)!=null){
+      if(integers.get(0)!=null && integers.get(0)!=0){
         rowFirst.add(integers.get(0));
       }
-      if(integers.size()>=2 && integers.get(1)!=null){
+      if(integers.size()>=2 && integers.get(1)!=null && integers.get(1)!=0){
         rowSecond.add(integers.get(1));
       }
-      if(integers.size()>=3 && integers.get(2)!=null){
+      if(integers.size()>=3 && integers.get(2)!=null && integers.get(2)!=0){
         rowThird.add(integers.get(2));
       }
     }
@@ -102,54 +102,100 @@ public class TicketService {
         if (singleNumberOperation(ticket[0], generatedNumber, rows, newNumber)) {
           continue;
         }
+        if(rows[ticket[0].size()%3].size()>=5){
+          fillRowsWithZeros(ticket);
+        }
       }else if(newNumber>=10 && newNumber<20){
         if (singleNumberOperation(ticket[1], generatedNumber, rows, newNumber)) {
           continue;
+        }
+        if(rows[ticket[1].size()%3].size()>=5){
+          fillRowsWithZeros(ticket);
         }
       }else if(newNumber>=20 && newNumber<30){
         if (singleNumberOperation(ticket[2], generatedNumber, rows, newNumber)) {
           continue;
         }
+        if(rows[ticket[2].size()%3].size()>=5){
+          fillRowsWithZeros(ticket);
+        }
       }else if(newNumber>=30 && newNumber<40){
         if (singleNumberOperation(ticket[3], generatedNumber, rows, newNumber)) {
           continue;
+        }
+        if(rows[ticket[4].size()%3].size()>=5){
+          fillRowsWithZeros(ticket);
         }
       }else if(newNumber>=40 && newNumber<50){
         if (singleNumberOperation(ticket[4], generatedNumber, rows, newNumber)) {
           continue;
         }
+        if(rows[ticket[4].size()%3].size()>=5){
+          fillRowsWithZeros(ticket);
+        }
       }else if(newNumber>=50 && newNumber<60){
         if (singleNumberOperation(ticket[5], generatedNumber, rows, newNumber)) {
           continue;
+        }
+        if(rows[ticket[5].size()%3].size()>=5){
+          fillRowsWithZeros(ticket);
         }
       }else if(newNumber>=60 && newNumber<70){
         if (singleNumberOperation(ticket[6], generatedNumber, rows, newNumber)) {
           continue;
         }
+        if(rows[ticket[6].size()%3].size()>=5){
+          fillRowsWithZeros(ticket);
+        }
       }else if(newNumber>=70 && newNumber<80){
         if (singleNumberOperation(ticket[7], generatedNumber, rows, newNumber)) {
           continue;
+        }
+        if(rows[ticket[7].size()%3].size()>=5){
+          fillRowsWithZeros(ticket);
         }
       }else if(newNumber>=80 && newNumber<=90){
         if (singleNumberOperation(ticket[8], generatedNumber, rows, newNumber)) {
           continue;
         }
+        if(rows[ticket[8].size()%3].size()>=5){
+          fillRowsWithZeros(ticket);
+        }
       }
       count++;
     }
-//    System.out.println(numberSequence);
-//    System.out.println(generatedNumber);
+    System.out.println(numberSequence);
+    System.out.println(generatedNumber);
     return ticket;
+  }
+
+  private void fillRowsWithZeros(List<Integer>[] ticket) {
+    for(List<Integer> integers : ticket){
+      if(integers.isEmpty()){
+        integers.add(0);
+      }
+    }
   }
 
   private boolean singleNumberOperation(List<Integer> integers, LinkedList<Integer> generatedNumber,
       List<Integer>[] rows, Integer newNumber) {
-    if(integers.size() == 3 || generatedNumber.contains(newNumber) || (rows[integers.size()%3].size()>=5)){
+    if(integers.size() >= 3 || containsCloserNumber(generatedNumber, newNumber, 3) || generatedNumber.contains(newNumber) || (rows[integers.size()%3].size()>=5)){
       return true;
     }
+    /*if(integers.size() == 3 || containsCloserNumber(generatedNumber, newNumber, 3) || generatedNumber.contains(newNumber)){
+      return true;
+    }*/
     generatedNumber.add(newNumber);
     integers.add(newNumber);
     rows[integers.size()-1%3].add(newNumber);
+    return false;
+  }
+
+  private boolean containsCloserNumber(LinkedList<Integer> generatedNumber, Integer newNumber, Integer offset){
+    Integer lowerLimit = newNumber - offset;
+    Integer upperLimit = newNumber + offset;
+
+//    return generatedNumber.stream().anyMatch(el -> el>=lowerLimit && el<=upperLimit);
     return false;
   }
 }

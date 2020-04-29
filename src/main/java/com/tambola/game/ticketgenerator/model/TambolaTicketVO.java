@@ -14,7 +14,7 @@ public class TambolaTicketVO {
   public void generatePrintalbeTicket(Integer[][] ticket){
     for(int i=0;i<ROW_SIZE;i++){
       for(int j=0;j<COLUMN_SIZE;j++){
-        String str = ticket[i][j] == null?"  ":String.valueOf(ticket[i][j]);
+        String str = ticket[i][j] == null || ticket[i][j] == 0?"  ":String.valueOf(ticket[i][j]);
         this.ticket[i][j] = str;
       }
     }

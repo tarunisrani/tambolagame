@@ -50,7 +50,6 @@ public class GameService {
 
     List<Integer> gameIds = gameDAO.getGameIds();
     Integer gameID = new SecureRandom().nextInt(Integer.MAX_VALUE);
-//    Integer gameID = 486935401;
     while(gameIds.contains(gameID)){
       gameID = new SecureRandom().nextInt(Integer.MAX_VALUE);
     }
@@ -104,10 +103,20 @@ public class GameService {
           .build()).toCompletableFuture().join();
       System.out.println(addUserResponse);
 
+      informPlayerForNewJoiner(userContext.getUserName(), game.getNotificationKey());
+
       return gameTicketDAO.getTicketForByGameIDAndTicketID(gameID, ticketID).getTicket();
     }else{
       throw new RuntimeException("No ticket available");
     }
+  }
+
+  private void informPlayerForNewJoiner(String userName, String notificationKey) {
+    NotificationMessage message = NotificationMessage.builder()
+        .to(notificationKey)
+        .data(ImmutableMap.of("newUser", userName))
+        .build();
+    messagingClient.sendMessage(message);
   }
 
   public Integer getNewNumber(Integer gameID){

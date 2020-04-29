@@ -3,7 +3,7 @@ package com.tambola.game.board;
 import com.tambola.game.CreateUserResponse;
 import com.tambola.game.UserContext;
 import com.tambola.game.game.UserDAO;
-import com.tambola.game.ticketgenerator.service.TicketService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,10 @@ public class UserService {
 
   public CreateUserResponse createUser(UserContext user){
     return new CreateUserResponse(userDAO.addUser(user));
+  }
+
+  public List<UserContext> getUserList(Integer gameID){
+    return userDAO.getUsersForGameID(gameID);
   }
 
   public String getNotificationKeyForUser(String mobileNumber){

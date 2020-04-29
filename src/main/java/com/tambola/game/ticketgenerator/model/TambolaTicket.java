@@ -45,7 +45,7 @@ public class TambolaTicket {
   public void printTicket(){
     for(int i=0;i<ROW_SIZE;i++){
       for(int j=0;j<COLUMN_SIZE;j++){
-        String str = ticket[i][j] == null?"  ":String.valueOf(ticket[i][j]);
+        String str = ticket[i][j] == null || ticket[i][j] == 0?"  ":String.valueOf(ticket[i][j]);
         System.out.printf("%4s|", str);
       }
       System.out.println();
