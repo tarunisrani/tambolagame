@@ -136,7 +136,7 @@ public class GameService {
     }
 
     RandomNumberGenerator numberGenerator = RandomNumberGenerator.getInstance();
-    List<Integer> numbers = gameNumberDAO.getNumbers(gameID);
+    List<Integer> numbers = getGeneratedNumbers(gameID);
     Set<Integer> numberSet = Sets.newHashSet(numbers);
     Integer nextNumber = numberGenerator.generateNextNumber();
     while(numberSet.contains(nextNumber)){
@@ -148,6 +148,10 @@ public class GameService {
     sendNumberToPlayers(gameID, nextNumber);
 
     return nextNumber;
+  }
+
+  public List<Integer> getGeneratedNumbers(Integer gameID) {
+    return gameNumberDAO.getNumbers(gameID);
   }
 
   private void sendNumberToPlayers(Integer gameID, Integer nextNumber) {

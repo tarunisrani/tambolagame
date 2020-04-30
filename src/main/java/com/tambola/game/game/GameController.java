@@ -3,6 +3,7 @@ package com.tambola.game.game;
 import com.tambola.game.Game;
 import com.tambola.game.UserContext;
 import com.tambola.game.ticketgenerator.model.TambolaTicketVO;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,5 +48,10 @@ public class GameController {
   @GetMapping("/game/nextnumber")
   public Integer getNewNumber(@RequestParam("game_id") Integer gameID, @RequestParam("mob_no") String mobileNumber){
     return gameService.getNewNumber(gameID, mobileNumber);
+  }
+
+  @GetMapping("/game/allnumbers")
+  public List<Integer> getAllNumbers(@RequestParam("game_id") Integer gameID){
+    return gameService.getGeneratedNumbers(gameID);
   }
 }
