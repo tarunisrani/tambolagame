@@ -24,7 +24,7 @@ public class UserController {
     UserContext userContext = UserContext.builder()
         .userName(request.getUserName())
         .notificationKey(request.getNotificationKey())
-        .mobileNumber(request.getMobNumber())
+        .mobileNumber(request.getMobileNumber())
         .build();
     return userService.createUser(userContext);
   }
