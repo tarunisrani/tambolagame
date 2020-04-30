@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class UserCreationRequest {
 
-  private String mobNumber;
+  private String mobileNumber;
   private String userName;
   private String notificationKey;
 }
