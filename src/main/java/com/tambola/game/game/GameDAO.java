@@ -22,6 +22,7 @@ public class GameDAO {
   private final String COL_GAME_ID = "game_id";
   private final String COL_OWNER_ID = "owner_id";
   private final String COL_NOTIFICATION_KEY = "notification_key";
+  private final String COL_STATUS = "status";
   private final String STAR =
       String.join(
           ",",
@@ -31,11 +32,18 @@ public class GameDAO {
 
 
   //SQL STATEMENTS
-  private final String QUERY_ADD_NUMBER =
+  private final String QUERY_ADD_GAME =
     String.format(
-        "insert into game_details(%1$s, %2$s) values(:%1$s, :%2$s)",
+        "insert into game_details(%1$s, %2$s, %3$s) values(:%1$s, :%2$s, :%3$s)",
         COL_GAME_ID,
-        COL_OWNER_ID);
+        COL_OWNER_ID,
+        COL_STATUS);
+
+  private final String QUERY_UPDATE_GAME =
+    String.format(
+        "update game_details set %1$s=:%1$s WHERE %2$s=:%2$s",
+        COL_GAME_ID,
+        COL_STATUS);
 
   private final String UPDATE_NOTIFICATION_KEY =
       String.format(
@@ -61,9 +69,19 @@ public class GameDAO {
     Map<String, Object> params = new HashMap<>();
     params.put(COL_GAME_ID, gameID);
     params.put(COL_OWNER_ID, ownerID);
+    params.put(COL_STATUS, "ACTIVE");
 
     return jdbcTemplateWrapper
-        .update(QUERY_ADD_NUMBER, params);
+        .update(QUERY_ADD_GAME, params);
+  }
+
+  public Integer updateGameStatus(Integer gameID, String status) {
+    Map<String, Object> params = new HashMap<>();
+    params.put(COL_GAME_ID, gameID);
+    params.put(COL_STATUS, status);
+
+    return jdbcTemplateWrapper
+        .update(QUERY_UPDATE_GAME, params);
   }
 
   public List<Integer> getGameIds(){
@@ -98,6 +116,8 @@ public class GameDAO {
               return Game.builder()
                   .notificationKey(resultSet.getString(COL_NOTIFICATION_KEY))
                   .gameID(resultSet.getLong(COL_GAME_ID))
+                  .ownerID(resultSet.getLong(COL_OWNER_ID))
+                  .status(resultSet.getString(COL_STATUS))
                   .build();
             }
           }, params);

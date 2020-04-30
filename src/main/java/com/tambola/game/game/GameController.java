@@ -5,7 +5,9 @@ import com.tambola.game.UserContext;
 import com.tambola.game.ticketgenerator.model.TambolaTicketVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +28,16 @@ public class GameController {
     return gameService.createGame(playerCount, gameType, user);
   }
 
+  @GetMapping("/game/{gameID}")
+  public Game getGameDetail(@PathVariable("gameID") Integer gameID){
+    return gameService.getGameDetails(gameID);
+  }
+
+  @PutMapping("/game/{gameID}")
+  public void finishGame(@PathVariable("gameID") Integer gameID, @RequestParam("mob_no") String mobileNumber){
+    gameService.markGameAsFinished(gameID, mobileNumber);
+  }
+
   @PostMapping("/game/ticket/assign")
   @ResponseBody
   public TambolaTicketVO assignTicket(@RequestParam("mob_no") String mobileNumber, @RequestParam("game_id") Integer gameID ){
@@ -33,7 +45,7 @@ public class GameController {
   }
 
   @GetMapping("/game/nextnumber")
-  public Integer getNewNumber(@RequestParam("game_id") Integer gameID){
-    return gameService.getNewNumber(gameID);
+  public Integer getNewNumber(@RequestParam("game_id") Integer gameID, @RequestParam("mob_no") String mobileNumber){
+    return gameService.getNewNumber(gameID, mobileNumber);
   }
 }

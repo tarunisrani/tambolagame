@@ -81,6 +81,15 @@ public class GameService {
         .build();
   }
 
+  public void markGameAsFinished(Integer gameID, String mobileNumber){
+    UserContext userContext = userDAO.getUserByMob(mobileNumber).orElseThrow(RuntimeException::new);
+    Game game = gameDAO.getGameByID(gameID).orElseThrow(RuntimeException::new);
+    if(game.getOwnerID().intValue()!=userContext.getUserID()){
+      throw new RuntimeException("Not an owner of game");
+    }
+    gameDAO.updateGameStatus(gameID, "FINISHED");
+  }
+
   public TambolaTicketVO assignTicket(String mobileNumber, Integer gameID) {
     UserContext userContext = userDAO.getUserByMob(mobileNumber).orElseThrow(RuntimeException::new);
     Game game = gameDAO.getGameByID(gameID).orElseThrow(RuntimeException::new);
@@ -119,7 +128,13 @@ public class GameService {
     messagingClient.sendMessage(message);
   }
 
-  public Integer getNewNumber(Integer gameID){
+  public Integer getNewNumber(Integer gameID, String mobileNumber){
+    UserContext userContext = userDAO.getUserByMob(mobileNumber).orElseThrow(RuntimeException::new);
+    Game game = gameDAO.getGameByID(gameID).orElseThrow(RuntimeException::new);
+    if(game.getOwnerID().intValue()!=userContext.getUserID()){
+      throw new RuntimeException("Not an owner of game");
+    }
+
     RandomNumberGenerator numberGenerator = RandomNumberGenerator.getInstance();
     List<Integer> numbers = gameNumberDAO.getNumbers(gameID);
     Set<Integer> numberSet = Sets.newHashSet(numbers);
@@ -145,5 +160,9 @@ public class GameService {
         .build();
     JsonObject sendMessageResponse = messagingClient.sendMessage(message).toCompletableFuture().join();
     System.out.println(sendMessageResponse);
+  }
+
+  public Game getGameDetails(Integer gameID) {
+    return gameDAO.getGameByID(gameID).orElseThrow(RuntimeException::new);
   }
 }

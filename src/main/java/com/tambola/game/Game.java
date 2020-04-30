@@ -13,6 +13,8 @@ public class Game {
   private Long boardID;
   private String notificationKey;
   private String ownerName;
+  private String status;
+  private Long ownerID;
   private String gameType;
   private List<TambolaTicketVO> ticketList;
 

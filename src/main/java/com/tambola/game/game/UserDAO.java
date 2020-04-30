@@ -40,7 +40,7 @@ public class UserDAO {
       String.format("select * from user_details where %1$s=:%1$s", COL_MOBILE_NUMBER);
 
   private final String QUERY_GET_USERS_FOR_GAME_ID =
-      String.format("select gt.game_id, ud.user_id, ud.mobile_number from game_ticket as gt join user_details ud on ud.mobile_number=gt.assigned_to where gt.%1$s=:%1$s",COL_GAME_ID);
+      String.format("select ud.user_id, ud.mobile_number, ud.name from game_ticket as gt join user_details ud on ud.mobile_number=gt.assigned_to where gt.%1$s=:%1$s",COL_GAME_ID);
 
   @Autowired
   public UserDAO(JDBCTemplateWrapper jdbcTemplateWrapper) {
@@ -67,9 +67,9 @@ public class UserDAO {
             @Override
             public UserContext mapRow(ResultSet resultSet, int i) throws SQLException {
               return UserContext.builder()
-                  .notificationKey(resultSet.getString(COL_NOTIFICATION_KEY))
                   .userID(resultSet.getInt(COL_USER_ID))
                   .userName(resultSet.getString(COL_NAME))
+                  .mobileNumber(resultSet.getString(COL_MOBILE_NUMBER))
                   .build();
             }
           }, params);
