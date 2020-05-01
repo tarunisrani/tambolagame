@@ -12,10 +12,6 @@ import java.util.List;
 
 public class TambolaTicket {
 
-  /*public void setTicketNumberSet(List<Integer>[] ticketNumberSet) {
-    this.ticketNumberSet = ticketNumberSet;
-  }*/
-
   private List<Integer>[] ticketNumberSet;
 
   public Integer[][] getTicket() {
@@ -31,13 +27,9 @@ public class TambolaTicket {
   public void arrangeNumbers(){
     for(int i=0;i< COLUMN_SIZE;i++){
       List<Integer> numberSet = ticketNumberSet[i];
-      if(numberSet.size() == 1){
-        ticket[1][i] = numberSet.get(0);
-      }else{
-        for(int j=0;j<numberSet.size();j++){
-          Integer number = numberSet.get(j);
-          ticket[j][i] = number;
-        }
+      for(int j=0;j<numberSet.size();j++){
+        Integer number = numberSet.get(j);
+        ticket[j][i] = number;
       }
     }
   }

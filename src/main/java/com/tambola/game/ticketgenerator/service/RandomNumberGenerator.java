@@ -18,12 +18,6 @@ public class RandomNumberGenerator {
   }
 
   public Integer generateNextNumber(){
-//    int randomNumber = 1;
-//    int randomNumber = new Random(random.nextInt(10000)).nextInt(90) + 1;
-//    randomNumber = (int)(random.nextDouble()*90.0);
-
-    int randomNumber = new SecureRandom().nextInt(90) +1;
-
-    return randomNumber;
+    return new SecureRandom().nextInt(90) +1;
   }
 }

@@ -187,7 +187,9 @@ public class TicketService {
     }*/
     generatedNumber.add(newNumber);
     integers.add(newNumber);
-    rows[integers.size()-1%3].add(newNumber);
+    Collections.sort(integers);
+    rows[integers.size()-1%3].add(integers.get(integers.size()-1));
+
     return false;
   }
 

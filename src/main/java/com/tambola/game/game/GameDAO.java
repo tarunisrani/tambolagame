@@ -42,8 +42,8 @@ public class GameDAO {
   private final String QUERY_UPDATE_GAME =
     String.format(
         "update game_details set %1$s=:%1$s WHERE %2$s=:%2$s",
-        COL_GAME_ID,
-        COL_STATUS);
+        COL_STATUS,
+        COL_GAME_ID);
 
   private final String UPDATE_NOTIFICATION_KEY =
       String.format(
