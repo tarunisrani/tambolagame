@@ -71,10 +71,8 @@ public class GameTicketDAO {
     params.put(COL_TICKET_ID, ticketID);
     params.put(COL_ASSIGNED_TO, assignTo);
 
-    KeyHolder keyHolder = new GeneratedKeyHolder();
     return jdbcTemplateWrapper
-        .updateWithGeneratedKeysWithColumns(QUERY_ASSIGN_TICKET, params, keyHolder,
-            new String[]{COL_TICKET_ID});
+        .insertAndGetKey(QUERY_ASSIGN_TICKET, params, new String[]{COL_TICKET_ID});
   }
 
   public Optional<GameTicket> getTicketForByGameIDAndUser(Integer gameID, String assignTo){
