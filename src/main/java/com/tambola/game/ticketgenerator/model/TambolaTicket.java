@@ -3,10 +3,6 @@ package com.tambola.game.ticketgenerator.model;
 import static com.tambola.game.ticketgenerator.service.TicketService.COLUMN_SIZE;
 import static com.tambola.game.ticketgenerator.service.TicketService.ROW_SIZE;
 
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,19 +37,6 @@ public class TambolaTicket {
         System.out.printf("%4s|", str);
       }
       System.out.println();
-    }
-  }
-
-  public void addRowsInPDF(PdfPTable table) {
-    for(int i=0;i<ROW_SIZE;i++){
-      for(int j=0;j<COLUMN_SIZE;j++){
-        String str = ticket[i][j] == null?"  ":String.valueOf(ticket[i][j]);
-        PdfPCell cell = new PdfPCell(new Phrase(str));
-        cell.setFixedHeight(50.0f);
-        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell.setVerticalAlignment(Element.ALIGN_CENTER);
-        table.addCell(cell);
-      }
     }
   }
 

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class GameController {
 
   @Autowired
-  GameService gameService;
+  private GameService gameService;
 
   @PostMapping("/game")
   public Game createGame(@RequestParam("player_count") Integer playerCount,

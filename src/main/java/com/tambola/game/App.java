@@ -1,8 +1,5 @@
 package com.tambola.game;
 
-import com.itextpdf.text.pdf.PdfPTable;
-import com.tambola.game.ticketgenerator.model.TambolaTicket;
-import com.tambola.game.ticketgenerator.service.TicketService;
 import java.util.List;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -41,11 +38,6 @@ public class App extends WebMvcConfigurerAdapter {
     registry.addMapping("/**").allowedOrigins("*");
   }
 
-  private static void addRows(PdfPTable table) {
-    table.addCell("row 1, col 1");
-    table.addCell("row 1, col 2");
-    table.addCell("row 1, col 3");
-  }
 
   /*private static void addTableHeader(PdfPTable table) {
     Stream.of("column header 1", "column header 2", "column header 3")
