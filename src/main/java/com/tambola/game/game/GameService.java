@@ -88,6 +88,7 @@ public class GameService {
       throw new RuntimeException("Not an owner of game");
     }
     gameDAO.updateGameStatus(gameID, "FINISHED");
+    informPlayerForGameEnd(game.getNotificationKey());
   }
 
   public TambolaTicketVO assignTicket(String mobileNumber, Integer gameID) {
@@ -124,6 +125,13 @@ public class GameService {
     NotificationMessage message = NotificationMessage.builder()
         .to(notificationKey)
         .data(ImmutableMap.of("newUser", userName))
+        .build();
+    messagingClient.sendMessage(message);
+  }
+  private void informPlayerForGameEnd(String notificationKey) {
+    NotificationMessage message = NotificationMessage.builder()
+        .to(notificationKey)
+        .data(ImmutableMap.of("game", "END"))
         .build();
     messagingClient.sendMessage(message);
   }
