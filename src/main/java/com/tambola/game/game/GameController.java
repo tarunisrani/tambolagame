@@ -1,6 +1,10 @@
 package com.tambola.game.game;
 
+import com.tambola.game.ClaimPrizeRequest;
 import com.tambola.game.Game;
+import com.tambola.game.GamePrize;
+import com.tambola.game.GamePrizeRequest;
+import com.tambola.game.GameTicket;
 import com.tambola.game.UserContext;
 import com.tambola.game.ticketgenerator.model.TambolaTicketVO;
 import java.util.List;
@@ -29,6 +33,11 @@ public class GameController {
     return gameService.createGame(playerCount, gameType, user);
   }
 
+  @PostMapping("/game/prize")
+  public void addPrizesToGame(@RequestBody GamePrizeRequest request){
+    gameService.addPrizes(request);
+  }
+
   @GetMapping("/game/{gameID}")
   public Game getGameDetail(@PathVariable("gameID") Integer gameID){
     return gameService.getGameDetails(gameID);
@@ -53,5 +62,33 @@ public class GameController {
   @GetMapping("/game/allnumbers")
   public List<Integer> getAllNumbers(@RequestParam("game_id") Integer gameID){
     return gameService.getGeneratedNumbers(gameID);
+  }
+
+  @PostMapping("/game/claim")
+  public void claimPrize(@RequestBody ClaimPrizeRequest request){
+    gameService.claimPrize(request.getGameID(), request.getPrizeName(), request.getMobileNumber(), request.getSelectedNUmber());
+  }
+
+  @GetMapping("/game/prize")
+  public List<GamePrize> getPrizeList(@RequestParam("game_id") Integer gameID){
+    return gameService.getPrizeList(gameID);
+  }
+
+  @PutMapping("/game/prize")
+  public void updatePrizeStatus(@RequestParam("game_id") Integer gameID,
+      @RequestParam("prize_name") String prizeName,
+      @RequestParam("winner_name") String winnerName){
+    gameService.updateWinnerOfPrize(gameID, prizeName, winnerName);
+  }
+
+  @GetMapping("/game/ticket/{ticketID}")
+  @ResponseBody
+  public GameTicket getTicket(@RequestParam("game_id") Integer gameID, @RequestParam("ticket_id") Integer ticketID){
+    return gameService.getTicket(gameID, ticketID);
+  }
+
+  @PostMapping("/game/alarm")
+  public void raisAlarm(@RequestParam("game_id") Integer gameID, @RequestParam("mob_no") String mobileNumber){
+    gameService.raiseAlarm(gameID, mobileNumber);
   }
 }

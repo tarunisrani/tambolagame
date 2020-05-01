@@ -9,5 +9,5 @@ import lombok.Getter;
 public class NotificationMessage {
 
   private String to;
-  private Map<String, String> data;
+  private Map<String, Object> data;
 }

@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public class GameDetails {
 
-  private Long gameID;
+  private Integer gameID;
   private String ownerName;
   private String gameType;
   private UserContext ownerDetails;

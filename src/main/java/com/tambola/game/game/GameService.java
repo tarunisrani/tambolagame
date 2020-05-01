@@ -5,6 +5,8 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
 import com.tambola.game.Game;
+import com.tambola.game.GamePrize;
+import com.tambola.game.GamePrizeRequest;
 import com.tambola.game.GameTicket;
 import com.tambola.game.MessagingClient;
 import com.tambola.game.NotificationGroup;
@@ -15,10 +17,13 @@ import com.tambola.game.ticketgenerator.model.TambolaTicketVO;
 import com.tambola.game.ticketgenerator.service.RandomNumberGenerator;
 import com.tambola.game.ticketgenerator.service.TicketService;
 import java.security.SecureRandom;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +44,9 @@ public class GameService {
 
   @Autowired
   private GameDAO gameDAO;
+
+  @Autowired
+  private GamePrizeDAO gamePrizeDAO;
 
   @Autowired
   private UserDAO userDAO;
@@ -176,5 +184,105 @@ public class GameService {
 
   public Game getGameDetails(Integer gameID) {
     return gameDAO.getGameByID(gameID).orElseThrow(RuntimeException::new);
+  }
+
+  public void addPrizes(GamePrizeRequest request){
+    Set<String> collect = new HashSet<>(request.getPrizeName());
+    collect.forEach(prizeName-> gamePrizeDAO.addGamePrize(request.getGameID(), prizeName, 0));
+  }
+
+  public List<GamePrize> getPrizeList(Integer gameID){
+    return gamePrizeDAO.getPrizesByGameID(gameID);
+  }
+
+  public void updateWinnerOfPrize(Integer gameID, String prizeName, String winnerName){
+    gamePrizeDAO.updatePrizeStatus(gameID, prizeName, winnerName);
+    informPlayerAboutPrizeUpdate(gameID, prizeName, winnerName);
+  }
+
+  private void informPlayerAboutPrizeUpdate(Integer gameID, String prizeName,
+      String winnerName) {
+    String notificationKey = gameDAO.getGameNotificationKey(gameID).orElseThrow(
+        RuntimeException::new);
+
+    NotificationMessage message = NotificationMessage.builder()
+        .to(notificationKey)
+        .data(ImmutableMap.of("PRIZE="+prizeName, winnerName))
+        .build();
+    JsonObject sendMessageResponse = messagingClient.sendMessage(message).toCompletableFuture().join();
+    System.out.println(sendMessageResponse);
+  }
+
+  private void informPlayerAboutAlarm(Integer gameID, String mobileNumber) {
+    String notificationKey = gameDAO.getGameNotificationKey(gameID).orElseThrow(
+        RuntimeException::new);
+
+    UserContext userContext = userDAO.getUserByMob(mobileNumber).orElseThrow(RuntimeException::new);
+    Map<String, Object> data = new ImmutableMap.Builder<String, Object>()
+        .put("action", "ALARM")
+        .put("playerName", userContext.getUserName())
+        .build();
+
+    NotificationMessage message = NotificationMessage.builder()
+        .to(notificationKey)
+        .data(data)
+        .build();
+    JsonObject sendMessageResponse = messagingClient.sendMessage(message).toCompletableFuture().join();
+    System.out.println(sendMessageResponse);
+  }
+
+  public void claimPrize(Integer gameID, String prizeName, String mobileNumber, List<Integer> selectedNumbers){
+    Game game = gameDAO.getGameByID(gameID).orElseThrow(RuntimeException::new);
+    List<Integer> numbers = gameNumberDAO.getNumbers(gameID);
+    boolean allMatch = selectedNumbers.stream().allMatch(numbers::contains);
+    UserContext gameOwner = userDAO.getUserById(game.getOwnerID().intValue())
+        .orElseThrow(RuntimeException::new);
+    informPlayersAboutClaim(game.getNotificationKey(), mobileNumber, prizeName);
+    informGameOwnerAboutClaim(gameID, gameOwner.getNotificationKey(), selectedNumbers, allMatch, mobileNumber, prizeName);
+  }
+
+  private void informGameOwnerAboutClaim(Integer gameID, String notificationKey,
+      List<Integer> selectedNumbers, boolean allMatch, String mobileNumber, String prizeName) {
+    GameTicket gameTicket = gameTicketDAO.getTicketForByGameIDAndUser(gameID, mobileNumber)
+        .orElseThrow(RuntimeException::new);
+
+    Map<String, Object> data = new ImmutableMap.Builder<String, Object>()
+        .put("action", "VERIFY")
+        .put("selectedNumbers", selectedNumbers)
+        .put("allMatch", allMatch)
+        .put("ticket", gameTicket.getTicketID())
+        .put("prizeName", prizeName)
+        .build();
+
+    NotificationMessage message = NotificationMessage.builder()
+        .to(notificationKey)
+        .data(data)
+        .build();
+    JsonObject sendMessageResponse = messagingClient.sendMessage(message).toCompletableFuture().join();
+    System.out.println(sendMessageResponse);
+  }
+
+  private void informPlayersAboutClaim(String notificationKey, String mobileNumber,
+      String prizeName) {
+    UserContext userContext = userDAO.getUserByMob(mobileNumber).orElseThrow(RuntimeException::new);
+    Map<String, Object> data = new ImmutableMap.Builder<String, Object>()
+        .put("action", "CLAIM")
+        .put("playerName", userContext.getUserName())
+        .put("prizeName", prizeName)
+        .build();
+    NotificationMessage message = NotificationMessage.builder()
+        .to(notificationKey)
+        .data(data)
+        .build();
+    JsonObject sendMessageResponse = messagingClient.sendMessage(message).toCompletableFuture().join();
+    System.out.println(sendMessageResponse);
+  }
+
+  public GameTicket getTicket(Integer gameID, Integer ticketID) {
+    return gameTicketDAO.getTicketForByGameIDAndTicketID(gameID, ticketID);
+  }
+
+  public void raiseAlarm(Integer gameID, String mobileNumber) {
+    informPlayerAboutAlarm(gameID, mobileNumber);
   }
 }
