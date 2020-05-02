@@ -64,8 +64,9 @@ public class TicketService {
     for(int i=0;i< COLUMN_SIZE;i++){
       count += ticket[i].stream().filter(el-> el!=0).count();
       List<Integer> integers = ticket[i];
-      if(integers.isEmpty()){
-        continue;
+
+      if(integers.stream().filter(el-> el!=0).collect(Collectors.toList()).isEmpty()){
+        return false;
       }
       if(integers.get(0)!=null && integers.get(0)!=0){
         rowFirst.add(integers.get(0));
@@ -164,8 +165,8 @@ public class TicketService {
       }
       count++;
     }
-    System.out.println(numberSequence);
-    System.out.println(generatedNumber);
+//    System.out.println(numberSequence);
+//    System.out.println(generatedNumber);
     return ticket;
   }
 
