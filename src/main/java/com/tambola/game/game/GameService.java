@@ -205,9 +205,14 @@ public class GameService {
     String notificationKey = gameDAO.getGameNotificationKey(gameID).orElseThrow(
         RuntimeException::new);
 
+    Map<String, Object> data = new ImmutableMap.Builder<String, Object>()
+        .put("action", "PRIZE")
+        .put("playerName", winnerName)
+        .build();
+
     NotificationMessage message = NotificationMessage.builder()
         .to(notificationKey)
-        .data(ImmutableMap.of("PRIZE="+prizeName, winnerName))
+        .data(data)
         .build();
     JsonObject sendMessageResponse = messagingClient.sendMessage(message).toCompletableFuture().join();
     System.out.println(sendMessageResponse);
@@ -245,6 +250,7 @@ public class GameService {
       List<Integer> selectedNumbers, boolean allMatch, String mobileNumber, String prizeName) {
     GameTicket gameTicket = gameTicketDAO.getTicketForByGameIDAndUser(gameID, mobileNumber)
         .orElseThrow(RuntimeException::new);
+    UserContext userContext = userDAO.getUserByMob(mobileNumber).orElseThrow(RuntimeException::new);
 
     Map<String, Object> data = new ImmutableMap.Builder<String, Object>()
         .put("action", "VERIFY")
@@ -252,6 +258,7 @@ public class GameService {
         .put("allMatch", allMatch)
         .put("ticket", gameTicket.getTicketID())
         .put("prizeName", prizeName)
+        .put("playerName", userContext.getUserName())
         .build();
 
     NotificationMessage message = NotificationMessage.builder()
