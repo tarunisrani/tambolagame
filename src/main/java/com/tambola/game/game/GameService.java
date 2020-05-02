@@ -208,6 +208,7 @@ public class GameService {
     Map<String, Object> data = new ImmutableMap.Builder<String, Object>()
         .put("action", "PRIZE")
         .put("playerName", winnerName)
+        .put("prizeName", prizeName)
         .build();
 
     NotificationMessage message = NotificationMessage.builder()
