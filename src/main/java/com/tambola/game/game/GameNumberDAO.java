@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -56,22 +57,22 @@ public class GameNumberDAO {
         .update(QUERY_ADD_NUMBER, params);
   }
 
-  public List<Integer> getNumbers(Integer gameID){
+  public LinkedList<Integer> getNumbers(Integer gameID){
     Map<String, Object> params = new HashMap<>();
     params.put(COL_GAME_ID, gameID);
 
     try {
       return jdbcTemplateWrapper
-          .querySingleRow(SEARCH_QUERY, new RowMapper<List<Integer>>() {
+          .querySingleRow(SEARCH_QUERY, new RowMapper<LinkedList<Integer>>() {
             @Override
-            public List<Integer> mapRow(ResultSet resultSet, int i) throws SQLException {
+            public LinkedList<Integer> mapRow(ResultSet resultSet, int i) throws SQLException {
               return new Gson()
-                  .fromJson(resultSet.getString(COL_NUMBERS), new TypeToken<List<Integer>>() {
+                  .fromJson(resultSet.getString(COL_NUMBERS), new TypeToken<LinkedList<Integer>>() {
                   }.getType());
             }
           }, params);
     }catch (EmptyResultDataAccessException exp){
-      return Collections.EMPTY_LIST;
+      return new LinkedList<>();
     }
   }
 }

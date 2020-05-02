@@ -7,6 +7,7 @@ import com.tambola.game.GamePrizeRequest;
 import com.tambola.game.GameTicket;
 import com.tambola.game.UserContext;
 import com.tambola.game.ticketgenerator.model.TambolaTicketVO;
+import java.util.LinkedList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,7 +61,7 @@ public class GameController {
   }
 
   @GetMapping("/game/allnumbers")
-  public List<Integer> getAllNumbers(@RequestParam("game_id") Integer gameID){
+  public LinkedList<Integer> getAllNumbers(@RequestParam("game_id") Integer gameID){
     return gameService.getGeneratedNumbers(gameID);
   }
 

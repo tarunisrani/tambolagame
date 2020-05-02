@@ -18,6 +18,7 @@ import com.tambola.game.ticketgenerator.service.RandomNumberGenerator;
 import com.tambola.game.ticketgenerator.service.TicketService;
 import java.security.SecureRandom;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -152,7 +153,7 @@ public class GameService {
     }
 
     RandomNumberGenerator numberGenerator = RandomNumberGenerator.getInstance();
-    List<Integer> numbers = getGeneratedNumbers(gameID);
+    LinkedList<Integer> numbers = getGeneratedNumbers(gameID);
     Set<Integer> numberSet = Sets.newHashSet(numbers);
     Integer nextNumber = numberGenerator.generateNextNumber();
     while(numberSet.contains(nextNumber)){
@@ -166,7 +167,7 @@ public class GameService {
     return nextNumber;
   }
 
-  public List<Integer> getGeneratedNumbers(Integer gameID) {
+  public LinkedList<Integer> getGeneratedNumbers(Integer gameID) {
     return gameNumberDAO.getNumbers(gameID);
   }
 
@@ -239,7 +240,7 @@ public class GameService {
 
   public void claimPrize(Integer gameID, String prizeName, String mobileNumber, List<Integer> selectedNumbers){
     Game game = gameDAO.getGameByID(gameID).orElseThrow(RuntimeException::new);
-    List<Integer> numbers = gameNumberDAO.getNumbers(gameID);
+    LinkedList<Integer> numbers = gameNumberDAO.getNumbers(gameID);
     boolean allMatch = selectedNumbers.stream().allMatch(numbers::contains);
     UserContext gameOwner = userDAO.getUserById(game.getOwnerID().intValue())
         .orElseThrow(RuntimeException::new);
