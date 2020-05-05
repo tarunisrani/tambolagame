@@ -59,7 +59,7 @@ public class GameDAO {
       String.format("select %1$s from game_details where %2$s=:%2$s", COL_NOTIFICATION_KEY, COL_GAME_ID);
 
   private final String GET_GAME_BY_ID =
-      String.format("select gd.game_id, gd.status, ud.name, ud.mobile_number from game_details gd join user_details ud on ud.user_id = gd.owner_id where gd.game_id=:%1$s", COL_GAME_ID);
+      String.format("select gd.game_id, gd.status, ud.name, ud.mobile_number, gd.notification_key from game_details gd join user_details ud on ud.user_id = gd.owner_id where gd.game_id=:%1$s", COL_GAME_ID);
 
   @Autowired
   public GameDAO(JDBCTemplateWrapper jdbcTemplateWrapper) {
