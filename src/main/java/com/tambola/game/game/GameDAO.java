@@ -23,6 +23,7 @@ public class GameDAO {
   private final String COL_OWNER_ID = "owner_id";
   private final String COL_NOTIFICATION_KEY = "notification_key";
   private final String COL_STATUS = "status";
+  private final String COL_MOBILE_NUMBER = "mobile_number";
   private final String STAR =
       String.join(
           ",",
@@ -58,7 +59,7 @@ public class GameDAO {
       String.format("select %1$s from game_details where %2$s=:%2$s", COL_NOTIFICATION_KEY, COL_GAME_ID);
 
   private final String GET_GAME_BY_ID =
-      String.format("select * from game_details where %1$s=:%1$s", COL_GAME_ID);
+      String.format("select gd.game_id, gd.status, ud.name, ud.mobile_number from game_details gd join user_details ud on ud.user_id = gd.owner_id where gd.game_id=:%1$s", COL_GAME_ID);
 
   @Autowired
   public GameDAO(JDBCTemplateWrapper jdbcTemplateWrapper) {
@@ -114,10 +115,9 @@ public class GameDAO {
             @Override
             public Game mapRow(ResultSet resultSet, int i) throws SQLException {
               return Game.builder()
-                  .notificationKey(resultSet.getString(COL_NOTIFICATION_KEY))
                   .gameID(resultSet.getLong(COL_GAME_ID))
-                  .ownerID(resultSet.getLong(COL_OWNER_ID))
                   .status(resultSet.getString(COL_STATUS))
+                  .ownerMobileNumber(resultSet.getString(COL_MOBILE_NUMBER))
                   .build();
             }
           }, params);

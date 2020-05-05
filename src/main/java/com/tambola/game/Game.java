@@ -13,6 +13,7 @@ public class Game {
   private Long boardID;
   private String notificationKey;
   private String ownerName;
+  private String ownerMobileNumber;
   private String status;
   private Long ownerID;
   private String gameType;
