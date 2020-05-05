@@ -115,7 +115,9 @@ public class GameDAO {
             @Override
             public Game mapRow(ResultSet resultSet, int i) throws SQLException {
               return Game.builder()
+                  .notificationKey(resultSet.getString(COL_NOTIFICATION_KEY))
                   .gameID(resultSet.getLong(COL_GAME_ID))
+                  .ownerID(resultSet.getLong(COL_OWNER_ID))
                   .status(resultSet.getString(COL_STATUS))
                   .ownerMobileNumber(resultSet.getString(COL_MOBILE_NUMBER))
                   .build();
