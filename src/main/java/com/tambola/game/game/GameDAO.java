@@ -24,6 +24,7 @@ public class GameDAO {
   private final String COL_NOTIFICATION_KEY = "notification_key";
   private final String COL_STATUS = "status";
   private final String COL_MOBILE_NUMBER = "mobile_number";
+  private final String COL_OWNER_NAME = "name";
   private final String STAR =
       String.join(
           ",",
@@ -59,7 +60,7 @@ public class GameDAO {
       String.format("select %1$s from game_details where %2$s=:%2$s", COL_NOTIFICATION_KEY, COL_GAME_ID);
 
   private final String GET_GAME_BY_ID =
-      String.format("select gd.game_id, gd.status, ud.name, ud.mobile_number, gd.notification_key from game_details gd join user_details ud on ud.user_id = gd.owner_id where gd.game_id=:%1$s", COL_GAME_ID);
+      String.format("select gd.game_id, gd.owner_id, gd.status, ud.name, ud.mobile_number, gd.notification_key from game_details gd join user_details ud on ud.user_id = gd.owner_id where gd.game_id=:%1$s", COL_GAME_ID);
 
   @Autowired
   public GameDAO(JDBCTemplateWrapper jdbcTemplateWrapper) {
@@ -120,6 +121,7 @@ public class GameDAO {
                   .ownerID(resultSet.getLong(COL_OWNER_ID))
                   .status(resultSet.getString(COL_STATUS))
                   .ownerMobileNumber(resultSet.getString(COL_MOBILE_NUMBER))
+                  .ownerName(resultSet.getString(COL_OWNER_NAME))
                   .build();
             }
           }, params);
