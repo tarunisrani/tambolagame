@@ -58,7 +58,7 @@ public class GameService {
         .orElseThrow(RuntimeException::new);
 
     List<Integer> gameIds = gameDAO.getGameIds();
-    Integer gameID = new SecureRandom().nextInt(Integer.MAX_VALUE);
+    Integer gameID = new SecureRandom().nextInt(999999);
     while(gameIds.contains(gameID)){
       gameID = new SecureRandom().nextInt(Integer.MAX_VALUE);
     }
