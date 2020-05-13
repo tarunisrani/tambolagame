@@ -17,6 +17,8 @@ import com.tambola.game.ticketgenerator.model.TambolaTicketVO;
 import com.tambola.game.ticketgenerator.service.RandomNumberGenerator;
 import com.tambola.game.ticketgenerator.service.TicketService;
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -153,14 +155,13 @@ public class GameService {
     }
 
     RandomNumberGenerator numberGenerator = RandomNumberGenerator.getInstance();
-    LinkedList<Integer> numbers = getGeneratedNumbers(gameID);
-    Set<Integer> numberSet = Sets.newHashSet(numbers);
+    Map<Integer, Integer> numbers = gameNumberDAO.getNumbers(gameID);
     Integer nextNumber = numberGenerator.generateNextNumber();
-    while(numberSet.contains(nextNumber)){
+    while(numbers.containsValue(nextNumber)){
       nextNumber = numberGenerator.generateNextNumber();
     }
-    numberSet.add(nextNumber);
-    gameNumberDAO.addNumber(gameID, numberSet);
+    numbers.put(numbers.size()+1, nextNumber);
+    gameNumberDAO.addNumber(gameID, numbers);
 
     sendNumberToPlayers(gameID, nextNumber);
 
@@ -168,7 +169,12 @@ public class GameService {
   }
 
   public LinkedList<Integer> getGeneratedNumbers(Integer gameID) {
-    return gameNumberDAO.getNumbers(gameID);
+    LinkedList<Integer> allNumbers = new LinkedList<>();
+    Map<Integer, Integer> numbers = gameNumberDAO.getNumbers(gameID);
+    for(int i=1;i<=numbers.size();i++){
+      allNumbers.add(numbers.get(i));
+    }
+    return allNumbers;
   }
 
   private void sendNumberToPlayers(Integer gameID, Integer nextNumber) {
@@ -240,8 +246,8 @@ public class GameService {
 
   public void claimPrize(Integer gameID, String prizeName, String mobileNumber, List<Integer> selectedNumbers){
     Game game = gameDAO.getGameByID(gameID).orElseThrow(RuntimeException::new);
-    LinkedList<Integer> numbers = gameNumberDAO.getNumbers(gameID);
-    boolean allMatch = selectedNumbers.stream().allMatch(numbers::contains);
+    Map<Integer, Integer> numbers = gameNumberDAO.getNumbers(gameID);
+    boolean allMatch = selectedNumbers.stream().allMatch(numbers::containsValue);
     UserContext gameOwner = userDAO.getUserById(game.getOwnerID().intValue())
         .orElseThrow(RuntimeException::new);
     informPlayersAboutClaim(game.getNotificationKey(), mobileNumber, prizeName);

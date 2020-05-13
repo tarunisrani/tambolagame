@@ -48,7 +48,7 @@ public class GameNumberDAO {
     this.jdbcTemplateWrapper = jdbcTemplateWrapper;
   }
 
-  public Integer addNumber(Integer gameID, Set<Integer> numbers) {
+  public Integer addNumber(Integer gameID, Map<Integer, Integer> numbers) {
     Map<String, Object> params = new HashMap<>();
     params.put(COL_GAME_ID, gameID);
     params.put(COL_NUMBERS, new Gson().toJson(numbers));
@@ -57,22 +57,22 @@ public class GameNumberDAO {
         .update(QUERY_ADD_NUMBER, params);
   }
 
-  public LinkedList<Integer> getNumbers(Integer gameID){
+  public Map<Integer, Integer> getNumbers(Integer gameID){
     Map<String, Object> params = new HashMap<>();
     params.put(COL_GAME_ID, gameID);
 
     try {
       return jdbcTemplateWrapper
-          .querySingleRow(SEARCH_QUERY, new RowMapper<LinkedList<Integer>>() {
+          .querySingleRow(SEARCH_QUERY, new RowMapper<Map<Integer, Integer>>() {
             @Override
-            public LinkedList<Integer> mapRow(ResultSet resultSet, int i) throws SQLException {
+            public Map<Integer, Integer> mapRow(ResultSet resultSet, int i) throws SQLException {
               return new Gson()
-                  .fromJson(resultSet.getString(COL_NUMBERS), new TypeToken<LinkedList<Integer>>() {
+                  .fromJson(resultSet.getString(COL_NUMBERS), new TypeToken<Map<Integer, Integer>>() {
                   }.getType());
             }
           }, params);
     }catch (EmptyResultDataAccessException exp){
-      return new LinkedList<>();
+      return new HashMap<>();
     }
   }
 }
