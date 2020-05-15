@@ -25,16 +25,18 @@ public class UserDAO {
   private final String COL_MOBILE_NUMBER = "mobile_number";
   private final String COL_NAME = "name";
   private final String COL_NOTIFICATION_KEY = "notification_key";
+  private final String COL_PROFILE_PIC_URL = "profile_pic_url";
 
 
 
   //SQL STATEMENTS
   private final String QUERY_ADD_USER =
     String.format(
-        "insert into user_details(%1$s, %2$s, %3$s) values(:%1$s, :%2$s, :%3$s) on conflict(%1$s) do update set %2$s=:%2$s, %3$s=:%3$s",
+        "insert into user_details(%1$s, %2$s, %3$s, %4$s) values(:%1$s, :%2$s, :%3$s, :%4$s) on conflict(%1$s) do update set %2$s=:%2$s, %3$s=:%3$s, %4$s=:%4$s",
         COL_MOBILE_NUMBER,
         COL_NAME,
-        COL_NOTIFICATION_KEY);
+        COL_NOTIFICATION_KEY,
+        COL_PROFILE_PIC_URL);
 
   private final String QUERY_SEARCH_BY_MOBILE_NUMBER =
       String.format("select * from user_details where %1$s=:%1$s", COL_MOBILE_NUMBER);
@@ -54,6 +56,7 @@ public class UserDAO {
     params.put(COL_NAME, context.getUserName());
     params.put(COL_MOBILE_NUMBER, context.getMobileNumber());
     params.put(COL_NOTIFICATION_KEY, context.getNotificationKey());
+    params.put(COL_PROFILE_PIC_URL, context.getProfilePic());
 
     return jdbcTemplateWrapper
         .insertAndGetKey(QUERY_ADD_USER, params, COL_USER_ID);
@@ -72,6 +75,7 @@ public class UserDAO {
                   .userID(resultSet.getInt(COL_USER_ID))
                   .userName(resultSet.getString(COL_NAME))
                   .mobileNumber(resultSet.getString(COL_MOBILE_NUMBER))
+                  .profilePic(resultSet.getString(COL_PROFILE_PIC_URL))
                   .build();
             }
           }, params);

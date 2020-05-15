@@ -29,6 +29,7 @@ public class UserController {
         .userName(request.getUserName())
         .notificationKey(request.getNotificationKey())
         .mobileNumber(request.getMobileNumber())
+        .profilePic(request.getProfilePic())
         .build();
     return userService.createUser(userContext);
   }

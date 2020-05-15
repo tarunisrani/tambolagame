@@ -11,4 +11,5 @@ public class UserContext {
   private String userName;
   private String mobileNumber;
   private String notificationKey;
+  private String profilePic;
 }

@@ -124,7 +124,7 @@ public class GameService {
           .build()).toCompletableFuture().join();
       System.out.println(addUserResponse);
 
-      informPlayerForNewJoiner(userContext.getUserName(), game.getNotificationKey());
+      informPlayerForNewJoiner(userContext, game.getNotificationKey());
 
       return gameTicketDAO.getTicketForByGameIDAndTicketID(gameID, ticketID).getTicket();
     }else{
@@ -132,10 +132,17 @@ public class GameService {
     }
   }
 
-  private void informPlayerForNewJoiner(String userName, String notificationKey) {
+  private void informPlayerForNewJoiner(UserContext userContext, String notificationKey) {
+
+    Map<String, Object> data = new ImmutableMap.Builder<String, Object>()
+        .put("newUser", userContext.getUserName())
+        .put("mobile_number", userContext.getMobileNumber())
+        .put("profile_pic", userContext.getProfilePic())
+        .build();
+
     NotificationMessage message = NotificationMessage.builder()
         .to(notificationKey)
-        .data(ImmutableMap.of("newUser", userName))
+        .data(data)
         .build();
     messagingClient.sendMessage(message);
   }
