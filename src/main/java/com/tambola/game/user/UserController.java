@@ -1,9 +1,9 @@
-package com.tambola.game.board;
+package com.tambola.game.user;
 
 import com.google.gson.JsonObject;
+import com.tambola.game.AudioMessageRequest;
 import com.tambola.game.CreateUserResponse;
 import com.tambola.game.SendMessageRequest;
-import com.tambola.game.SendMessageResponse;
 import com.tambola.game.UserContext;
 import com.tambola.game.UserCreationRequest;
 import java.util.List;
@@ -32,6 +32,7 @@ public class UserController {
         .build();
     return userService.createUser(userContext);
   }
+
   @PostMapping("/user/{mob_no}/game/{gameID}/message")
   public JsonObject sendMessage(@PathVariable("gameID") Integer gameID, @PathVariable("mob_no") String mobileNumber, @RequestBody SendMessageRequest request){
     return userService.sendMessage(gameID, mobileNumber, request);
@@ -40,5 +41,10 @@ public class UserController {
   @GetMapping("/users")
   public List<UserContext> getUserList(@RequestParam("game_id") Integer gameID){
     return userService.getUserList(gameID);
+  }
+
+  @PostMapping("/user/{mob_no}/game/{gameID}/audio")
+  public JsonObject getUserList(@PathVariable("gameID") Integer gameID, @PathVariable("mob_no") String mobileNumber, @RequestBody AudioMessageRequest request){
+    return userService.updateAudioMessageUrl(gameID, mobileNumber, request);
   }
 }

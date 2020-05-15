@@ -1,13 +1,13 @@
-package com.tambola.game.board;
+package com.tambola.game.user;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
+import com.tambola.game.AudioMessageRequest;
 import com.tambola.game.CreateUserResponse;
 import com.tambola.game.Game;
 import com.tambola.game.MessagingClient;
 import com.tambola.game.NotificationMessage;
 import com.tambola.game.SendMessageRequest;
-import com.tambola.game.SendMessageResponse;
 import com.tambola.game.UserContext;
 import com.tambola.game.game.GameService;
 import com.tambola.game.game.UserDAO;
@@ -61,5 +61,23 @@ public class UserService {
 
   public String getNotificationKeyForUserById(Integer userID){
     return userDAO.getUserById(userID).map(UserContext::getNotificationKey).orElseThrow(()-> new RuntimeException());
+  }
+
+  public JsonObject updateAudioMessageUrl(Integer gameID, String mobileNumber,
+      AudioMessageRequest request){
+    Game gameDetails = gameService.getGameDetails(gameID);
+    UserContext userContext = userDAO.getUserByMob(mobileNumber).orElseThrow(RuntimeException::new);
+    Map<String, Object> data = new ImmutableMap.Builder<String, Object>()
+        .put("action", "AUDIO")
+        .put("url", request.getUrl())
+        .put("senderName", userContext.getUserName())
+        .put("senderMobNo", mobileNumber)
+        .build();
+
+    NotificationMessage message = NotificationMessage.builder()
+        .to(gameDetails.getNotificationKey())
+        .data(data)
+        .build();
+    return messagingClient.sendMessage(message).toCompletableFuture().join();
   }
 }
