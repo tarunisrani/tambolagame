@@ -97,6 +97,7 @@ public class UserDAO {
                   .notificationKey(resultSet.getString(COL_NOTIFICATION_KEY))
                   .userID(resultSet.getInt(COL_USER_ID))
                   .userName(resultSet.getString(COL_NAME))
+                  .mobileNumber(resultSet.getString(COL_MOBILE_NUMBER))
                   .build();
             }
           }, params);
