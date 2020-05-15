@@ -44,7 +44,7 @@ public class UserDAO {
       String.format("select * from user_details where %1$s=:%1$s", COL_USER_ID);
 
   private final String QUERY_GET_USERS_FOR_GAME_ID =
-      String.format("select ud.user_id, ud.mobile_number, ud.name from game_ticket as gt join user_details ud on ud.mobile_number=gt.assigned_to where gt.%1$s=:%1$s",COL_GAME_ID);
+      String.format("select ud.user_id, ud.mobile_number, ud.name, ud.profile_pic_url from game_ticket as gt join user_details ud on ud.mobile_number=gt.assigned_to where gt.%1$s=:%1$s",COL_GAME_ID);
 
   @Autowired
   public UserDAO(JDBCTemplateWrapper jdbcTemplateWrapper) {
