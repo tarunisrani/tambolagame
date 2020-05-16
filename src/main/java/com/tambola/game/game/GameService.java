@@ -2,6 +2,7 @@ package com.tambola.game.game;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
 import com.tambola.game.Game;
@@ -134,15 +135,25 @@ public class GameService {
 
   private void informPlayerForNewJoiner(UserContext userContext, String notificationKey) {
 
-    Map<String, Object> data = new ImmutableMap.Builder<String, Object>()
+
+
+    /*Map<String, Object> data = new ImmutableMap.Builder<String, Object>()
         .put("newUser", userContext.getUserName())
         .put("mobile_number", userContext.getMobileNumber())
         .put("profile_pic", userContext.getProfilePic())
-        .build();
+        .build();*/
+
+    Builder<String, Object> builder = new Builder<String, Object>()
+        .put("newUser", userContext.getUserName())
+        .put("mobile_number", userContext.getMobileNumber());
+
+    if(userContext.getProfilePic()!=null){
+      builder = builder.put("profile_pic", userContext.getProfilePic());
+    }
 
     NotificationMessage message = NotificationMessage.builder()
         .to(notificationKey)
-        .data(data)
+        .data(builder.build())
         .build();
     messagingClient.sendMessage(message);
   }
