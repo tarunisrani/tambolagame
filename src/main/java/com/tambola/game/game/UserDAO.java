@@ -98,6 +98,7 @@ public class UserDAO {
                   .userID(resultSet.getInt(COL_USER_ID))
                   .userName(resultSet.getString(COL_NAME))
                   .mobileNumber(resultSet.getString(COL_MOBILE_NUMBER))
+                  .profilePic(resultSet.getString(COL_PROFILE_PIC_URL))
                   .build();
             }
           }, params);
@@ -119,6 +120,7 @@ public class UserDAO {
                   .notificationKey(resultSet.getString(COL_NOTIFICATION_KEY))
                   .userID(resultSet.getInt(COL_USER_ID))
                   .userName(resultSet.getString(COL_NAME))
+                  .profilePic(resultSet.getString(COL_PROFILE_PIC_URL))
                   .build();
             }
           }, params);
