@@ -1,5 +1,6 @@
 package com.tambola.game.game;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
@@ -135,25 +136,25 @@ public class GameService {
 
   private void informPlayerForNewJoiner(UserContext userContext, String notificationKey) {
 
-
-
-    /*Map<String, Object> data = new ImmutableMap.Builder<String, Object>()
+    Map<String, Object> data = new ImmutableMap.Builder<String, Object>()
         .put("newUser", userContext.getUserName())
         .put("mobile_number", userContext.getMobileNumber())
-        .put("profile_pic", userContext.getProfilePic())
-        .build();*/
+        .put("profile_pic", Strings.isNullOrEmpty(userContext.getProfilePic())?"":Strings.isNullOrEmpty(userContext.getProfilePic()))
+        .build();
 
-    Builder<String, Object> builder = new Builder<String, Object>()
+    /*Builder<String, Object> builder = new Builder<String, Object>()
         .put("newUser", userContext.getUserName())
-        .put("mobile_number", userContext.getMobileNumber());
+        .put("mobile_number", userContext.getMobileNumber());*/
 
-    if(userContext.getProfilePic()!=null){
-      builder = builder.put("profile_pic", userContext.getProfilePic());
-    }
+//    if(userContext.getProfilePic()!=null){
+//      builder = builder.put("profile_pic", userContext.getProfilePic());
+//    }
 
     NotificationMessage message = NotificationMessage.builder()
         .to(notificationKey)
-        .data(builder.build())
+//        .data(builder.build())
+        .data(data)
+        .priority(10)
         .build();
     messagingClient.sendMessage(message);
   }
@@ -161,6 +162,7 @@ public class GameService {
     NotificationMessage message = NotificationMessage.builder()
         .to(notificationKey)
         .data(ImmutableMap.of("game", "END"))
+        .priority(10)
         .build();
     messagingClient.sendMessage(message);
   }
@@ -202,6 +204,7 @@ public class GameService {
     NotificationMessage message = NotificationMessage.builder()
         .to(notificationKey)
         .data(ImmutableMap.of("number", String.valueOf(nextNumber)))
+        .priority(10)
         .build();
     JsonObject sendMessageResponse = messagingClient.sendMessage(message).toCompletableFuture().join();
     System.out.println(sendMessageResponse);
@@ -239,6 +242,7 @@ public class GameService {
     NotificationMessage message = NotificationMessage.builder()
         .to(notificationKey)
         .data(data)
+        .priority(10)
         .build();
     JsonObject sendMessageResponse = messagingClient.sendMessage(message).toCompletableFuture().join();
     System.out.println(sendMessageResponse);
@@ -257,6 +261,7 @@ public class GameService {
     NotificationMessage message = NotificationMessage.builder()
         .to(notificationKey)
         .data(data)
+        .priority(10)
         .build();
     JsonObject sendMessageResponse = messagingClient.sendMessage(message).toCompletableFuture().join();
     System.out.println(sendMessageResponse);
@@ -290,6 +295,7 @@ public class GameService {
     NotificationMessage message = NotificationMessage.builder()
         .to(notificationKey)
         .data(data)
+        .priority(10)
         .build();
     JsonObject sendMessageResponse = messagingClient.sendMessage(message).toCompletableFuture().join();
     System.out.println(sendMessageResponse);
@@ -306,6 +312,7 @@ public class GameService {
     NotificationMessage message = NotificationMessage.builder()
         .to(notificationKey)
         .data(data)
+        .priority(10)
         .build();
     JsonObject sendMessageResponse = messagingClient.sendMessage(message).toCompletableFuture().join();
     System.out.println(sendMessageResponse);

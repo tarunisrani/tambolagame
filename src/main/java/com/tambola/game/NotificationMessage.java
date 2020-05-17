@@ -9,5 +9,6 @@ import lombok.Getter;
 public class NotificationMessage {
 
   private String to;
+  private Integer priority;
   private Map<String, Object> data;
 }

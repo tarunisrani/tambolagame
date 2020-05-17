@@ -47,6 +47,7 @@ public class UserService {
     NotificationMessage message = NotificationMessage.builder()
         .to(gameDetails.getNotificationKey())
         .data(data)
+        .priority(10)
         .build();
     return messagingClient.sendMessage(message).toCompletableFuture().join();
   }
@@ -77,6 +78,7 @@ public class UserService {
     NotificationMessage message = NotificationMessage.builder()
         .to(gameDetails.getNotificationKey())
         .data(data)
+        .priority(10)
         .build();
     return messagingClient.sendMessage(message).toCompletableFuture().join();
   }
